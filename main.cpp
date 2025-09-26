@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <SDL3/SDL.h>
 #include <glad/glad.h>
-
+ 
 int main()
 {
 	if (!SDL_Init(SDL_INIT_VIDEO)) {
@@ -148,5 +148,6 @@ int main()
 	SDL_GL_DestroyContext(context);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+
 	return 0;
 }
