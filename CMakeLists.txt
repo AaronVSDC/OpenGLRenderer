@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.16) # FetchContent is stable from 3.14+
+﻿cmake_minimum_required(VERSION 3.16)
 
 project(OpenGLProject_CMake)
 
@@ -27,10 +27,12 @@ target_include_directories(glad PUBLIC glad/include)
 # include all files needed over here (.cpp files or .h files if there are no .cpp )
 # ----------------------------------------------------------------------------------
 file(GLOB SOURCES
-    "main.cpp"
+    "source/main.cpp"
 )
  
 add_executable(OpenGLProject_CMake ${SOURCES})
+target_include_directories(OpenGLProject_CMake PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 
 # Link SDL3 and GLAD
 target_link_libraries(OpenGLProject_CMake
