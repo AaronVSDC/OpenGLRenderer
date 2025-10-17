@@ -1,5 +1,8 @@
 #include "Application.h"
 #include "Window/Window.h"
+#include "InputManager.h"
+#include "glad/glad.h"
+
 namespace Papyrus
 {
 	Application::Application()
@@ -11,18 +14,18 @@ namespace Papyrus
     }
     void Application::run()
 	{
-        bool quit = false; 
-        while (!quit)
-        {
-            SDL_Event sdlEvent;
+        InputManager& inputManager = InputManager::getInstance(); 
 
-            while (SDL_PollEvent(&sdlEvent))
-            {
-                if (sdlEvent.type == SDL_EVENT_QUIT) 
-                {
-                    quit = true;
-                }
-            }
+        bool doContinue = true; 
+        while (doContinue)
+        {
+            doContinue = inputManager.processInput(); 
+
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            SDL_GL_SwapWindow(m_Window->getHandle());
+
         }
 
 	}

@@ -16,7 +16,12 @@ namespace Papyrus
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-		m_SDLWindow = SDL_CreateWindow(title.c_str(), width, height, SDL_WINDOW_OPENGL);
+		m_SDLWindow = SDL_CreateWindow(
+			title.c_str(),
+			width,
+			height,
+			SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+
 		if (m_SDLWindow == nullptr) {
 			std::cerr << "Failed to create SDL Window: " << SDL_GetError() << std::endl;
 			SDL_Quit();
@@ -33,6 +38,8 @@ namespace Papyrus
 			std::cerr << "Failed to initialize GLAD" << std::endl;
 			return;
 		}
+
+		glViewport(0, 0, width, height);
 	}
 
 	Window::~Window()

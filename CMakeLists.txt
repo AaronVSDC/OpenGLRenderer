@@ -44,6 +44,8 @@ file(GLOB SOURCES
     "source/main.cpp"
     "source/Application/Application.cpp"
     "source/Window/Window.cpp"
+    "source/Singleton.h"
+    "source/InputManager.cpp"
 )
  
 add_executable(OpenGLProject_CMake ${SOURCES})
