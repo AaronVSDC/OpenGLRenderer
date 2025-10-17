@@ -20,18 +20,35 @@ FetchContent_MakeAvailable(SDL3)
 # ----------------------------------------------------------------------------------
 # GLAD
 # ----------------------------------------------------------------------------------
-add_library(glad STATIC glad/src/glad.c)
+add_library(glad STATIC glad/src/glad.c )
 target_include_directories(glad PUBLIC glad/include)
+
+# ----------------------------------------------------------------------------------
+# stb (header-only)
+# ----------------------------------------------------------------------------------
+FetchContent_Declare(
+  stb
+  GIT_REPOSITORY https://github.com/nothings/stb.git
+  GIT_TAG master   
+)
+FetchContent_MakeAvailable(stb)
+
+add_library(stb INTERFACE)
+target_include_directories(stb INTERFACE ${stb_SOURCE_DIR})
+
 
 # ----------------------------------------------------------------------------------
 # include all files needed over here (.cpp files or .h files if there are no .cpp )
 # ----------------------------------------------------------------------------------
 file(GLOB SOURCES
     "source/main.cpp"
+    "source/Application/Application.cpp"
+    "source/Window/Window.cpp"
 )
  
 add_executable(OpenGLProject_CMake ${SOURCES})
-target_include_directories(OpenGLProject_CMake PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(OpenGLProject_CMake PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/source
+)
 
 
 # Link SDL3 and GLAD
@@ -39,6 +56,7 @@ target_link_libraries(OpenGLProject_CMake
     PRIVATE
         SDL3::SDL3
         glad
+        stb
 )
 
 #Copy SDL3.dll next to the executable after build
