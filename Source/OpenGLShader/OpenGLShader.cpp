@@ -16,10 +16,10 @@ namespace Papyrus
         contents << in.rdbuf();
         return contents.str();
     } 
-
+    //TODO: maybe consider seperating each shader type instead of creating 2 at once 
+    //if we want to have a a geometry shader aswell or deferred rendering for example.
     OpenGLShader::OpenGLShader(const std::string& vertexPath,
         const std::string& fragmentPath)
-       
     {
         std::string vertexSrc = ReadFile(vertexPath);
         std::string fragmentSrc = ReadFile(fragmentPath);

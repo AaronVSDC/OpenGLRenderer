@@ -4,7 +4,7 @@
 
 int main()
 {
-	Papyrus::Application app; 
-	app.run(); 
+	auto app = std::make_unique<Papyrus::Application>(); 
+	app->run(); 
 	return 0;
 }

@@ -22,8 +22,8 @@ namespace Papyrus
 		SDL_Window* getHandle() const { return m_SDLWindow; }
 
 	private:
-		SDL_Window* m_SDLWindow; 
-		SDL_GLContext m_Context; 
+		SDL_Window* m_SDLWindow = {nullptr};
+		SDL_GLContext m_Context = {};
 	};
 
 
