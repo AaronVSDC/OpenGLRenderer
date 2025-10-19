@@ -51,7 +51,7 @@ namespace Papyrus
 
             glDeleteShader(shader);
 
-            throw std::runtime_error("Shader compile failure: " + infoLog);
+            std::cerr << "Shader compile failure: " + infoLog << std::endl; 
         }
 
         return shader; 
@@ -85,7 +85,6 @@ namespace Papyrus
             throw std::runtime_error("Shader link failure: " + infoLog);
         }
 
-        // shaders can be detached & deleted after linking
         glDetachShader(program, vs);
         glDetachShader(program, fs);
         glDeleteShader(vs);

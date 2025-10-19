@@ -40,24 +40,15 @@ FetchContent_MakeAvailable(assimp)
 # ----------------------------------------------------------------------------------
 # GLAD
 # ----------------------------------------------------------------------------------
-add_library(glad STATIC glad/src/glad.c )
-target_include_directories(glad PUBLIC glad/include)
-
-
+add_library(glad STATIC 3rdParty/glad/src/glad.c )
+target_include_directories(glad PUBLIC 3rdParty/glad/include)
 
 
 # ----------------------------------------------------------------------------------
-# stb (header-only)
+# stb_image
 # ----------------------------------------------------------------------------------
-FetchContent_Declare(
-  stb
-  GIT_REPOSITORY https://github.com/nothings/stb.git
-  GIT_TAG master   
-)
-FetchContent_MakeAvailable(stb)
-
-add_library(stb INTERFACE)
-target_include_directories(stb INTERFACE ${stb_SOURCE_DIR})
+add_library(stb_image STATIC 3rdParty/stb_image/stb_image.cpp)
+target_include_directories(stb_image PUBLIC 3rdParty/stb_image)
 
 
 # ----------------------------------------------------------------------------------
@@ -100,7 +91,7 @@ target_link_libraries(OpenGLProject_CMake
     PRIVATE
         SDL3::SDL3
         glad 
-        stb
+        stb_image 
         glm::glm-header-only
         assimp
 )
@@ -112,7 +103,7 @@ add_custom_command(TARGET OpenGLProject_CMake POST_BUILD
     $<TARGET_FILE_DIR:OpenGLProject_CMake>)
 
 
-#same with shader file
+#same with shader folder
 set(SHADER_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Shaders")
 set(SHADER_BINARY_DIR "$<TARGET_FILE_DIR:OpenGLProject_CMake>/Shaders")
 
@@ -121,4 +112,14 @@ add_custom_command(TARGET OpenGLProject_CMake POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${SHADER_SOURCE_DIR}"
             "${SHADER_BINARY_DIR}"
+)
+#same with resource folder
+set(RESOURCE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Resources")
+set(RESOURCE_BINARY_DIR "$<TARGET_FILE_DIR:OpenGLProject_CMake>/Resources")
+
+add_custom_command(TARGET OpenGLProject_CMake POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${RESOURCE_BINARY_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${RESOURCE_SOURCE_DIR}"
+            "${RESOURCE_BINARY_DIR}"
 )
