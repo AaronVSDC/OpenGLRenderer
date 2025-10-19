@@ -15,8 +15,8 @@ namespace Papyrus
 		Window(const std::string& title, int width, int height);
 		Window(const Window&) = delete;
 		Window(const Window&&) = delete;
-		Window& operator=(Window&) = delete;
-		Window& operator=(Window&&) = delete;
+		Window& operator=(const Window&) = delete;
+		Window& operator=(const Window&&) = delete;
 		~Window();
 
 		SDL_Window* getHandle() const { return m_SDLWindow; }
