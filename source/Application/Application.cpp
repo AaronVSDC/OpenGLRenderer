@@ -195,8 +195,8 @@ namespace Papyrus
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            awesomeFaceTexture->bind(0); 
-            containerTexture->bind(1); 
+            containerTexture->bind(0);
+            awesomeFaceTexture->bind(1); 
             shaders->use();
 
             glm::mat4 projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);

@@ -13,7 +13,7 @@ namespace Papyrus
 		int internalFormat = GL_RGB;
 		int imageFormat = GL_RGB;
 		bool generateMipmaps = true;
-		bool flipVertically = true;
+		bool flipVertically = false;
 	};
 
 	class Texture
