@@ -11,7 +11,6 @@
 #include <SDL3/SDL_mouse.h>
 
 
-
 namespace Papyrus
 {
     // Camera variables
@@ -41,13 +40,20 @@ namespace Papyrus
     {
         InputManager& inputManager = InputManager::getInstance();
 
+        //--------------------
+        //SHADER CREATION
+        //--------------------
         auto shaders = std::make_unique<OpenGLShader>(
             "Shaders/vertShader.vert",
             "Shaders/fragShader.frag"
         );
 
+        //this lines enables depth testing so that stuff behind other stuff isnt visible
         glEnable(GL_DEPTH_TEST);
 
+        //------------------------
+        //VERTICES INPUT (will be done with modelloading)
+        //------------------------
         float vertices[] = {
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
              0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -105,6 +111,10 @@ namespace Papyrus
             glm::vec3(-1.3f, 1.0f, -1.5f)
         };
 
+
+        //--------------------------------------
+        //VERTEX BUFFER AND VERTEX ATTRIBUTES
+        //--------------------------------------
         unsigned int VBO, VAO;
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
@@ -117,7 +127,9 @@ namespace Papyrus
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
-        // Textures
+        //--------------------
+        // TEXTURES
+        //--------------------
         unsigned int texture1, texture2;
         glGenTextures(1, &texture1);
         glBindTexture(GL_TEXTURE_2D, texture1);
@@ -173,27 +185,16 @@ namespace Papyrus
 
                 if (e.type == SDL_EVENT_MOUSE_MOTION)
                 {
-                    float xpos = static_cast<float>(e.motion.x);
-                    float ypos = static_cast<float>(e.motion.y);
 
-                    if (firstMouse)
-                    {
-                        lastX = xpos;
-                        lastY = ypos;
-                        firstMouse = false;
-                    }
-
-                    float xoffset = xpos - lastX;
-                    float yoffset = lastY - ypos;
-                    lastX = xpos;
-                    lastY = ypos;
+                    float xoffset = static_cast<float>(e.motion.xrel);
+                    float yoffset = static_cast<float>(e.motion.yrel);
 
                     float sensitivity = 0.1f;
                     xoffset *= sensitivity;
                     yoffset *= sensitivity;
 
                     yaw += xoffset;
-                    pitch += yoffset;
+                    pitch -= yoffset;
 
                     if (pitch > 89.0f) pitch = 89.0f;
                     if (pitch < -89.0f) pitch = -89.0f;
