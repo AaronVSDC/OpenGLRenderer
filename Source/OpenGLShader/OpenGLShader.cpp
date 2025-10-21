@@ -93,12 +93,12 @@ namespace Papyrus
         return program;
     }
 
-    void OpenGLShader::bind() const
+    void OpenGLShader::use() const
     {
         glUseProgram(m_RendererID);
     }
 
-    void OpenGLShader::unbind() const
+    void OpenGLShader::remove() const
     {
         glUseProgram(0);
     }

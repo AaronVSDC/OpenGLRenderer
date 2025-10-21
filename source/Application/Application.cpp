@@ -1,7 +1,6 @@
 #include "Application.h"
 #include "Window.h"
 #include "InputManager.h"
-#include "glad/glad.h"
 #include "OpenGLShader.h"
 #include "stb_image.h"
 #include <glm/glm.hpp>
@@ -9,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <SDL3/SDL_mouse.h>
+#include "Texture.h"
 
 
 namespace Papyrus
@@ -130,43 +130,12 @@ namespace Papyrus
         //--------------------
         // TEXTURES
         //--------------------
-        unsigned int texture1, texture2;
-        glGenTextures(1, &texture1);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        auto awesomeFaceTexture = std::make_unique<Texture>("Resources/Textures/awesomeface.png");
+        auto containerTexture = std::make_unique<Texture>("Resources/Textures/container.jpg");
 
-        stbi_set_flip_vertically_on_load(true);
-        int width, height, nrChannels;
-        unsigned char* data = stbi_load("Resources/Textures/container.jpg", &width, &height, &nrChannels, 0);
-        if (data)
-        {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }
-        else std::cerr << "Failed to load texture 1" << std::endl;
-        stbi_image_free(data);
-
-        glGenTextures(1, &texture2);
-        glBindTexture(GL_TEXTURE_2D, texture2);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        data = stbi_load("Resources/Textures/awesomeface.png", &width, &height, &nrChannels, 0);
-        if (data)
-        {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }
-        else std::cerr << "Failed to load texture 2" << std::endl;
-        stbi_image_free(data);
-
-        shaders->bind();
-        shaders->uploadUniformInt("texture1", 0);
-        shaders->uploadUniformInt("texture2", 1);
+        shaders->use();
+        shaders->uploadUniformInt("awesomefaceTexture", 0);
+        shaders->uploadUniformInt("containerTexture", 1);
 
         bool doContinue = true;
         while (doContinue)
@@ -226,11 +195,9 @@ namespace Papyrus
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, texture1);
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, texture2);
-            shaders->bind();
+            awesomeFaceTexture->bind(0); 
+            containerTexture->bind(1); 
+            shaders->use();
 
             glm::mat4 projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
             glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);

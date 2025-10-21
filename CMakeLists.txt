@@ -61,6 +61,7 @@ file(GLOB SOURCES
     "Source/Singleton.h"
     "Source/InputManager.cpp"
     "Source/OpenGLShader/OpenGLShader.cpp"
+    "Source/Texture/Texture.cpp"
 )
  
 add_executable(OpenGLProject_CMake ${SOURCES})

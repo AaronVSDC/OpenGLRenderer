@@ -18,8 +18,8 @@ namespace Papyrus
 
         ~OpenGLShader();
 
-        void bind() const;
-        void unbind() const;
+        void use() const;
+        void remove() const; 
 
         void uploadUniformInt(const std::string& name, int value);
         void uploadUniformFloat(const std::string& name, float value);
