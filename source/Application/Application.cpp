@@ -9,6 +9,10 @@
 #include <iostream>
 #include <SDL3/SDL_mouse.h>
 #include "Texture.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <vector>
 
 
 namespace Papyrus
@@ -27,6 +31,59 @@ namespace Papyrus
 
     static float deltaTime = 0.0f;
     static float lastFrame = 0.0f;
+
+    struct SimpleMesh {
+
+        std::vector<float> vertices;
+
+    };
+
+    SimpleMesh loadFBX(const std::string& path)
+    {
+        SimpleMesh mesh;
+
+        // Create an importer instance
+        Assimp::Importer importer;
+
+        // Load the FBX file
+        const aiScene* scene = importer.ReadFile(path,
+            aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_GenNormals);
+
+        // Check for errors
+        if (!scene || !scene->HasMeshes()) {
+            std::cerr << "Failed to load model: " << importer.GetErrorString() << std::endl;
+            return mesh;
+        }
+
+        const aiMesh* aMesh = scene->mMeshes[0]; // first mesh
+
+        // Loop through faces to create sequential triangle vertices
+        for (unsigned int f = 0; f < aMesh->mNumFaces; ++f) {
+            const aiFace& face = aMesh->mFaces[f];
+            // Process indices
+            for (unsigned int i = 0; i < face.mNumIndices; ++i) {
+                unsigned int idx = face.mIndices[i];
+
+                // position
+                mesh.vertices.push_back(aMesh->mVertices[idx].x);
+                mesh.vertices.push_back(aMesh->mVertices[idx].y);
+                mesh.vertices.push_back(aMesh->mVertices[idx].z);
+
+                // texcoords
+                if (aMesh->HasTextureCoords(0)) {
+                    mesh.vertices.push_back(aMesh->mTextureCoords[0][idx].x);
+                    mesh.vertices.push_back(aMesh->mTextureCoords[0][idx].y);
+                }
+                else {
+                    mesh.vertices.push_back(0.0f);
+                    mesh.vertices.push_back(0.0f);
+                }
+            }
+        }
+
+        return mesh;
+    }
+
 
     Application::Application()
     {
@@ -52,78 +109,33 @@ namespace Papyrus
         glEnable(GL_DEPTH_TEST);
 
         //------------------------
-        //VERTICES INPUT (will be done with modelloading)
+        //LOAD FBX MODEL
         //------------------------
-        float vertices[] = {
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-        };
-
-        glm::vec3 cubePositions[] = {
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(2.0f, 5.0f, -15.0f),
-            glm::vec3(-1.5f, -2.2f, -2.5f),
-            glm::vec3(-3.8f, -2.0f, -12.3f),
-            glm::vec3(2.4f, -0.4f, -3.5f),
-            glm::vec3(-1.7f, 3.0f, -7.5f),
-            glm::vec3(1.3f, -2.0f, -2.5f),
-            glm::vec3(1.5f, 2.0f, -2.5f),
-            glm::vec3(1.5f, 0.2f, -1.5f),
-            glm::vec3(-1.3f, 1.0f, -1.5f)
-        };
-
+        
+        SimpleMesh mesh = loadFBX("Resources/Models/monkey.fbx");
+        if (mesh.vertices.empty()) {
+            std::cerr << "No vertices loaded." << std::endl;
+            SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                "Error", "Failed to load FBX.", m_Window->getHandle());
+        }
 
         //--------------------------------------
-        //VERTEX BUFFER AND VERTEX ATTRIBUTES
+        //VERTEX BUFFER AND ATTRIBUTES
         //--------------------------------------
         unsigned int VBO, VAO;
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glBindVertexArray(VAO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+        //Mesh Vertices
+        glBufferData(GL_ARRAY_BUFFER, mesh.vertices.size() * sizeof(float), mesh.vertices.data(), GL_STATIC_DRAW);
+
+        //Position
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
+
+        //Texcoords
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
@@ -204,16 +216,15 @@ namespace Papyrus
             shaders->uploadUniformMat4("projection", projection);
             shaders->uploadUniformMat4("view", view);
 
+
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::scale(model, glm::vec3(0.1f)); // scale down
+            shaders->uploadUniformMat4("model", model);
+
             glBindVertexArray(VAO);
-            for (unsigned int i = 0; i < 10; i++)
-            {
-                glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, cubePositions[i]);
-                float angle = 20.0f * i;
-                model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-                shaders->uploadUniformMat4("model", model);
-                glDrawArrays(GL_TRIANGLES, 0, 36);
-            }
+
+            //mesh vertices
+            glDrawArrays(GL_TRIANGLES, 0, mesh.vertices.size() / 5);
 
             SDL_GL_SwapWindow(m_Window->getHandle());
         }

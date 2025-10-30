@@ -103,6 +103,13 @@ add_custom_command(TARGET OpenGLProject_CMake POST_BUILD
     $<TARGET_FILE:SDL3::SDL3>
     $<TARGET_FILE_DIR:OpenGLProject_CMake>)
 
+# Copy Assimp DLL next to the executable
+add_custom_command(TARGET OpenGLProject_CMake POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "$<TARGET_FILE:assimp::assimp>"
+    $<TARGET_FILE_DIR:OpenGLProject_CMake>
+)
+
 
 #same with shader folder
 set(SHADER_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Shaders")
