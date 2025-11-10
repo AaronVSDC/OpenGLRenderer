@@ -111,8 +111,10 @@ namespace Papyrus
         //------------------------
         //LOAD FBX MODEL
         //------------------------
-        
+
         SimpleMesh mesh = loadFBX("Resources/Models/monkey.fbx");
+        //SimpleMesh mesh = loadFBX("Resources/Models/cottage.fbx");
+        //SimpleMesh mesh = loadFBX("Resources/Models/HLboot_camp.fbx");
         if (mesh.vertices.empty()) {
             std::cerr << "No vertices loaded." << std::endl;
             SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
@@ -142,11 +144,11 @@ namespace Papyrus
         //--------------------
         // TEXTURES
         //--------------------
-        auto awesomeFaceTexture = std::make_unique<Texture>("Resources/Textures/awesomeface.png");
+        auto awesomeFaceTexture = std::make_unique<Texture>("Resources/Textures/snow.png");
         auto containerTexture = std::make_unique<Texture>("Resources/Textures/container.jpg");
 
         shaders->use();
-        shaders->uploadUniformInt("awesomefaceTexture", 0);
+        shaders->uploadUniformInt("snowTexture", 0);
         shaders->uploadUniformInt("containerTexture", 1);
 
         bool doContinue = true;
@@ -218,7 +220,7 @@ namespace Papyrus
 
 
             glm::mat4 model = glm::mat4(1.0f);
-            model = glm::scale(model, glm::vec3(0.1f)); // scale down
+            model = glm::scale(model, glm::vec3(1.0f)); // scale
             shaders->uploadUniformMat4("model", model);
 
             glBindVertexArray(VAO);
