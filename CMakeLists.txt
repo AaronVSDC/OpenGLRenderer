@@ -58,10 +58,16 @@ file(GLOB SOURCES
     "Source/main.cpp"
     "Source/Application/Application.cpp"
     "Source/Window/Window.cpp"
-    "Source/Singleton.h"
+    "Source/Singleton.h" 
     "Source/InputManager.cpp"
     "Source/OpenGLShader/OpenGLShader.cpp"
     "Source/Texture/Texture.cpp"
+    "Source/Game/Camera/Camera.cpp" 
+    "Source/Engine/BaseComponent.h"
+    "Source/Engine/GameObject.cpp" 
+    "Source/Engine/SceneManager.cpp"
+    "Source/Engine/Scene.cpp"
+    "Source/Engine/Renderer/Renderer.cpp"
 )
  
 add_executable(OpenGLProject_CMake ${SOURCES})
@@ -82,7 +88,7 @@ endforeach()
 list(REMOVE_DUPLICATES HEADER_DIRS)
 
 target_include_directories(OpenGLProject_CMake
-  PRIVATE
+  PRIVATE 
     ${HEADER_DIRS}
     ${stb_SOURCE_DIR}
 )

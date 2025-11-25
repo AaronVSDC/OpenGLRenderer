@@ -13,7 +13,12 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <vector>
-
+#include "GameObject.h"
+#include "Camera.h" 
+#include "SceneManager.h" 
+#include "Renderer.h"
+#include <chrono>
+#include <thread>
 
 namespace Papyrus
 {
@@ -100,6 +105,7 @@ namespace Papyrus
         //--------------------
         //SHADER CREATION
         //--------------------
+
         auto shaders = std::make_unique<OpenGLShader>(
             "Shaders/vertShader.vert",
             "Shaders/fragShader.frag"
@@ -112,9 +118,9 @@ namespace Papyrus
         //LOAD FBX MODEL
         //------------------------
 
-        SimpleMesh mesh = loadFBX("Resources/Models/monkey.fbx");
-        //SimpleMesh mesh = loadFBX("Resources/Models/cottage.fbx");
-        //SimpleMesh mesh = loadFBX("Resources/Models/HLboot_camp.fbx");
+        //SimpleMesh mesh = loadFBX("Resources/Models/monkey.fbx");
+        SimpleMesh mesh = loadFBX("Resources/Models/cottage.fbx");
+        //SimpleMesh mesh = loadFBX("Resources/Models/HLboot_camp.fbx"); 
         if (mesh.vertices.empty()) {
             std::cerr << "No vertices loaded." << std::endl;
             SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
@@ -231,7 +237,69 @@ namespace Papyrus
             SDL_GL_SwapWindow(m_Window->getHandle());
         }
 
+
+
+        //------------------------------------------------------
+        load();
+
+        constexpr int desiredFPS{ 60 };
+        constexpr int frameTimeMs{ 1000 / desiredFPS };
+
+        auto& renderer = Renderer::getInstance();
+        auto& sceneManager = SceneManager::getInstance();
+        auto& input = InputManager::getInstance();
+
+        const float fixedTimeStep{ 0.02f };
+
+        bool doContinue = true;
+        auto lastTime = std::chrono::high_resolution_clock::now();
+        float lag = 0.0f;
+
+        sceneManager.onEnable();
+        sceneManager.start();
+        while (doContinue)
+        {
+            const auto currentTime = std::chrono::high_resolution_clock::now();
+            const float deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
+            lastTime = currentTime;
+            lag += deltaTime;
+
+            doContinue = input.processInput();
+
+            sceneManager.onEnable();
+
+            while (lag >= fixedTimeStep)
+            {
+                sceneManager.fixedUpdate(fixedTimeStep);
+                lag -= fixedTimeStep;
+            }
+            sceneManager.update(deltaTime);
+            renderer.render();
+            sceneManager.onDisable();
+
+            const auto sleepTime = currentTime + std::chrono::milliseconds(frameTimeMs) - std::chrono::high_resolution_clock::now();
+            std::this_thread::sleep_for(sleepTime);
+        }
+
+
+        //-----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
         glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VBO);
+    }
+    void Application::load()
+    {
+        auto camera = std::unique_ptr<GameObject>(); 
+
+        camera->addComponent(std::unique_ptr<Camera>()); 
+
+
     }
 }

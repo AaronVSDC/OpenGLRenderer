@@ -2,6 +2,7 @@
 #define TEXTURE_H
 #include <string>
 #include "glad\glad.h" 
+
 namespace Papyrus
 {
 	struct TextureConfigInfo

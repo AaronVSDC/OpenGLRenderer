@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include <stb_image.h>
-#include "Application/Application.h"
+#include "Application.h"
 
 int main()
 {
