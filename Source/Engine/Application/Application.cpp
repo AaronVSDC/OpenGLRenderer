@@ -76,7 +76,6 @@ namespace Papyrus
         auto cottageModel = std::make_unique<GameObject>(); 
         cottageModel->addComponent(std::make_unique<MeshComponent>("Resources/Models/portal2_button.fbx"));
         cottageModel->transform.scale = glm::vec3{ 0.1 }; 
-        cottageModel->transform.rotationEuler = glm::vec3{ 180.f,0.f,0.f }; 
 
         auto shader = std::make_unique<OpenGLShader>("Shaders/vertShader.vert", "Shaders/fragShader.frag"); 
         auto texture = std::make_unique<Texture>("Resources/Textures/portal_button_blue.jpeg"); 

@@ -11,6 +11,15 @@ namespace Papyrus
 
         auto& mesh = loadFBX(m_FBXPath);
 
+        if (mesh.vertices.empty() || mesh.indices.empty())
+        {
+            std::cerr << "MeshComponent: no geometry loaded from '" << m_FBXPath << "'" << std::endl;
+            return;
+        }
+
+        std::cout << "MeshComponent: loaded " << mesh.vertices.size() << " vertices and "
+            << mesh.indices.size() << " indices from '" << m_FBXPath << "'" << std::endl;
+
         glGenVertexArrays(1, &m_VAO);
         glGenBuffers(1, &m_VBO);
         glGenBuffers(1, &m_EBO);
