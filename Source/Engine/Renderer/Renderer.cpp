@@ -54,7 +54,7 @@ namespace Papyrus
             //TODO: INSTEAD OF JUST ADDING THIS HERE LIKE A LAZY PERSON ACTUALLY DECOUPLE THE RENDERING LOGIC AND MAKE IT COMPLETELY BOILERPLATE
             const glm::vec3 lightDir = glm::normalize(glm::vec3(-0.2f, -1.0f, -0.3f));
             shader->uploadUniformFloat3("lightDirection", lightDir);
-            shader->uploadUniformFloat3("lightColor", glm::vec3(1.000, 0.75, 0.45));
+            shader->uploadUniformFloat3("lightColor", glm::vec3(1.000, 0.97, 0.90));
             shader->uploadUniformFloat3("ambientColor", glm::vec3(0.2f));
 
             // Upload MVP
