@@ -11,7 +11,7 @@ namespace Papyrus
 
         auto& mesh = loadFBX(m_FBXPath);
 
-        if (mesh.vertices.empty() || mesh.indices.empty())
+        if (mesh.vertices.empty() || mesh.indices.empty()) 
         {
             std::cerr << "MeshComponent: no geometry loaded from '" << m_FBXPath << "'" << std::endl;
             return;

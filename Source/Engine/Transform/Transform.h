@@ -4,7 +4,7 @@
 
 namespace Papyrus
 {
-	struct Transform final
+	struct Transform 
 	{
 		glm::vec3 position{};
 		glm::vec3 rotationEuler{ 0.0f };
