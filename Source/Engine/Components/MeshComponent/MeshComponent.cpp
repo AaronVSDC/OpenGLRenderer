@@ -7,6 +7,8 @@ namespace Papyrus
 {
 	void MeshComponent::onEnable()
 	{
+        glEnable(GL_DEPTH_TEST); 
+
         auto& mesh = loadFBX(m_FBXPath);
 
         glGenVertexArrays(1, &m_VAO);

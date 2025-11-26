@@ -75,11 +75,19 @@ namespace Papyrus
         camera->addComponent(std::make_unique<CameraComponent>()); 
 
         auto cottageModel = std::make_unique<GameObject>(); 
-        cottageModel->addComponent(std::make_unique<MeshComponent>("Models/cottage.fbx"));
+        cottageModel->addComponent(std::make_unique<MeshComponent>("Resources/Models/cottage.fbx"));
 
         auto shader = std::make_unique<OpenGLShader>("Shaders/vertShader.vert", "Shaders/fragShader.frag"); 
         auto texture = std::make_unique<Texture>("Resources/Textures/container.jpg"); 
         cottageModel->addComponent(std::make_unique<MaterialComponent>(std::move(shader), std::move(texture))); 
+
+        auto* scene = SceneManager::getInstance().createScene("Default");
+        if (scene != nullptr) 
+        {
+            scene->setIsActive(true);
+            scene->add(std::move(camera));
+            scene->add(std::move(cottageModel));
+        }
 
     }
 }
