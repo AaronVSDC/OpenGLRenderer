@@ -104,19 +104,21 @@ namespace Papyrus
             const aiMesh* aMesh = scene->mMeshes[meshIndex];
             const unsigned int vertexOffset = static_cast<unsigned int>(m_Mesh.vertices.size());
 
-            // --- Load vertices ---
+            //-------------------------
+            // LOAD VERTICES
+            //-------------------------
             for (unsigned int i = 0; i < aMesh->mNumVertices; i++)
             {
                 Vertex v{};
 
-                // Position
+                //Position
                 v.pos = {
                     aMesh->mVertices[i].x,
                     aMesh->mVertices[i].y,
                     aMesh->mVertices[i].z
                 };
 
-                // UVs
+                //UVs
                 if (aMesh->HasTextureCoords(0)) {
                     v.uv = {
                         aMesh->mTextureCoords[0][i].x,
@@ -127,7 +129,7 @@ namespace Papyrus
                     v.uv = { 0.0f, 0.0f };
                 }
 
-                // Normals
+                //Normals
                 if (aMesh->HasNormals()) {
                     v.normal = {
                         aMesh->mNormals[i].x,
@@ -142,7 +144,9 @@ namespace Papyrus
                 m_Mesh.vertices.push_back(v);
             }
 
-            // --- Load indices ---
+            //----------------
+            //LOAD INDICES
+            //----------------
             for (unsigned int f = 0; f < aMesh->mNumFaces; f++)
             {
                 const aiFace& face = aMesh->mFaces[f];
