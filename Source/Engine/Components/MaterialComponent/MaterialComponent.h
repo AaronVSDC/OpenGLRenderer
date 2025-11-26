@@ -18,7 +18,7 @@ namespace Papyrus
         MaterialComponent(const MaterialComponent&) = delete; 
         MaterialComponent(const MaterialComponent&&) = delete;
         MaterialComponent& operator=(const MaterialComponent&) = delete; 
-        MaterialComponent& operator=(const MaterialComponent&&) = delete;
+        MaterialComponent& operator=(const MaterialComponent&&) = delete; 
 
         OpenGLShader* getShader() const { return m_pShader.get(); } 
         Texture* getTexture() const { return m_pTexture.get(); } 

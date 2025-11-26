@@ -3,10 +3,10 @@ out vec4 FragColor;
 
 in vec2 TexCoord;
 
-uniform sampler2D snowTexture;
-uniform sampler2D containerTexture;
+uniform sampler2D diffuseTexture;
+
 
 void main()
 { 
-    FragColor = mix(texture(snowTexture, TexCoord), texture(containerTexture, TexCoord), 0.2);
+    FragColor = texture(diffuseTexture, TexCoord); 
 }

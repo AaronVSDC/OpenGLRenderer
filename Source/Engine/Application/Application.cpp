@@ -52,8 +52,6 @@ namespace Papyrus
 
             doContinue = input.processInput();
 
-            sceneManager.onEnable();
-
             while (lag >= fixedTimeStep)
             {
                 sceneManager.fixedUpdate(fixedTimeStep);
@@ -61,11 +59,11 @@ namespace Papyrus
             }
             sceneManager.update(deltaTime);
             renderer.render();
-            sceneManager.onDisable();
 
-            //const auto sleepTime = currentTime + std::chrono::milliseconds(frameTimeMs) - std::chrono::high_resolution_clock::now();
-            //std::this_thread::sleep_for(sleepTime);
+            const auto sleepTime = currentTime + std::chrono::milliseconds(frameTimeMs) - std::chrono::high_resolution_clock::now();
+            std::this_thread::sleep_for(sleepTime);
         }
+        sceneManager.onDisable();
 
 
     }
