@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "CameraComponent.h"
 
 namespace Papyrus
 {
@@ -62,7 +63,20 @@ namespace Papyrus
 	{
 		for (auto& object : m_Objects)
 		{
-			object->onEnable();
+			object->onDisable();
+		} 
+	}
+
+	CameraComponent* Scene::getActiveCamera()
+	{
+		for (auto& object : m_Objects)
+		{
+			if (object->hasComponent<CameraComponent>())
+			{
+				auto camera = object->getComponent<CameraComponent>(); 
+				return camera; 
+			} 
 		}
+		return nullptr;
 	}
 }

@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 #include "BaseComponent.h"
-//#include "Transform.h"
+#include "Transform.h"
+ 
 namespace Papyrus
 {
 	class GameObject final
@@ -26,7 +27,6 @@ namespace Papyrus
 		void onDisable();
 
 
-		//Transform getTransform() const { return m_Transform; }
 		//bool getIsActive() const { return m_IsActive; }
 
 		//component stuff
@@ -91,9 +91,9 @@ namespace Papyrus
 		}
 
 		//todo: dirty flag pattern, scene graphs 
+		Transform transform = {};
 	private:
 
-		//Transform m_Transform = {};
 		std::vector<std::unique_ptr<BaseComponent>> m_Components = {}; 
 	};
 }

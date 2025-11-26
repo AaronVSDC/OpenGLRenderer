@@ -4,8 +4,11 @@
 
 namespace Papyrus
 {
+	std::unique_ptr<Window> GWindow = nullptr; 
+
 	Window::Window(const std::string& title, int width, int height)
-	{
+		:m_WIDTH{width}, m_HEIGHT{height}
+	{ 
 		if (!SDL_Init(SDL_INIT_VIDEO)) {
 			std::cerr << "SDL_Init failed: " << SDL_GetError() << std::endl;
 			return;
@@ -18,8 +21,8 @@ namespace Papyrus
 
 		m_SDLWindow = SDL_CreateWindow(
 			title.c_str(),
-			width,
-			height,
+			m_WIDTH,
+			m_HEIGHT,
 			SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
 		if (m_SDLWindow == nullptr) {

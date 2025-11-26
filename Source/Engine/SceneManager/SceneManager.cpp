@@ -10,9 +10,10 @@ namespace Papyrus
 
 	Scene* SceneManager::getCurrentScene() const
 	{
+		//Todo: this isnt sound logic lol
 		for (const auto& scene : m_pScenes)
-		{
-			return scene.get();
+		{ 
+			if(scene->getIsActive() )return scene.get();
 		}
 		return nullptr;
 	}

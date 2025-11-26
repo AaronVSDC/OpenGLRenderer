@@ -17,7 +17,6 @@ namespace Papyrus
 		void run();
 		void load(); 
 	private:
-		std::unique_ptr<Window> m_Window; 
 
 
 	};

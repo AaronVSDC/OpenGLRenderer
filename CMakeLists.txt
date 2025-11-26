@@ -54,20 +54,9 @@ target_include_directories(stb_image PUBLIC 3rdParty/stb_image)
 # ----------------------------------------------------------------------------------
 # include all files needed over here (.cpp files or .h files if there are no .cpp )
 # ----------------------------------------------------------------------------------
-file(GLOB SOURCES
-    "Source/main.cpp"
-    "Source/Application/Application.cpp"
-    "Source/Window/Window.cpp"
-    "Source/Singleton.h" 
-    "Source/InputManager.cpp"
-    "Source/OpenGLShader/OpenGLShader.cpp"
-    "Source/Texture/Texture.cpp"
-    "Source/Game/Camera/Camera.cpp" 
-    "Source/Engine/BaseComponent.h"
-    "Source/Engine/GameObject.cpp" 
-    "Source/Engine/SceneManager.cpp"
-    "Source/Engine/Scene.cpp"
-    "Source/Engine/Renderer/Renderer.cpp"
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h" 
 )
  
 add_executable(OpenGLProject_CMake ${SOURCES})
