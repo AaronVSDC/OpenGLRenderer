@@ -39,16 +39,15 @@ namespace Papyrus
             auto mesh = gameObject->getComponent<MeshComponent>();
             auto material = gameObject->getComponent<MaterialComponent>();
 
-            if (!mesh || !material) 
+            if (!mesh || !material) {
                 continue;
-            
+            }
 
 
             OpenGLShader* shader = material->getShader();
             Texture* texture = material->getTexture();
 
             shader->use();
-            shader->uploadUniformInt("diffuseTexture", 0); 
 
             // Upload MVP
             shader->uploadUniformMat4("model", gameObject->transform.getModelMatrix() );  
@@ -64,9 +63,10 @@ namespace Papyrus
             // Draw VAO
             glBindVertexArray(mesh->getVAO());
             glDrawElements(GL_TRIANGLES, mesh->getIndexCount(), GL_UNSIGNED_INT, 0);
+
         }
         SDL_GL_SwapWindow(GWindow->getHandle());
-         
+
     }
 
 }

@@ -59,7 +59,7 @@ namespace Papyrus
             }
             sceneManager.update(deltaTime);
             renderer.render();
-
+             
             const auto sleepTime = currentTime + std::chrono::milliseconds(frameTimeMs) - std::chrono::high_resolution_clock::now();
             std::this_thread::sleep_for(sleepTime);
         }
@@ -71,9 +71,12 @@ namespace Papyrus
     {
         auto camera = std::make_unique<GameObject>(); 
         camera->addComponent(std::make_unique<CameraComponent>()); 
+        camera->transform.position = glm::vec3{ 0.f,3.f,3.f }; 
 
         auto cottageModel = std::make_unique<GameObject>(); 
         cottageModel->addComponent(std::make_unique<MeshComponent>("Resources/Models/portal2_button.fbx"));
+        cottageModel->transform.scale = glm::vec3{ 0.1 }; 
+        cottageModel->transform.rotationEuler = glm::vec3{ 180.f,0.f,0.f }; 
 
         auto shader = std::make_unique<OpenGLShader>("Shaders/vertShader.vert", "Shaders/fragShader.frag"); 
         auto texture = std::make_unique<Texture>("Resources/Textures/portal_button_blue.jpeg"); 

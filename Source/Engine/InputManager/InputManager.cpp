@@ -6,16 +6,24 @@ namespace Papyrus
 {
     bool InputManager::processInput()
     {
+        m_MouseDelta = {};   // reset each frame
+
         SDL_Event e;
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_EVENT_QUIT)
                 return false;
-            //TODO: maybe its best to seperate the openGL stuff from the actual processInput and other engine code (if we plan on making the engine code api agnostic)
-            if (e.type == SDL_EVENT_WINDOW_RESIZED) 
-                glViewport(0, 0, e.window.data1, e.window.data2);
             
+            if (e.type == SDL_SCANCODE_ESCAPE) 
+                return false; 
+
+            if (e.type == SDL_EVENT_MOUSE_MOTION)
+            {
+                m_MouseDelta.x += e.motion.xrel;
+                m_MouseDelta.y += e.motion.yrel;
+            }
         }
-        return true; 
+
+        return true;
     }
 }
