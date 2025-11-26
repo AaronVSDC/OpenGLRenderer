@@ -87,7 +87,9 @@ namespace Papyrus
             path,
             aiProcess_Triangulate |
             aiProcess_GenNormals |
-            aiProcess_JoinIdenticalVertices
+            aiProcess_JoinIdenticalVertices |
+            aiProcess_PreTransformVertices |
+            aiProcess_FlipUVs
         );
 
         if (!scene || !scene->HasMeshes()) {
@@ -96,57 +98,62 @@ namespace Papyrus
             return m_Mesh;
         }
 
-        const aiMesh* aMesh = scene->mMeshes[0];
-
-        // --- Load vertices ---
-        for (unsigned int i = 0; i < aMesh->mNumVertices; i++)
+        for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex)
         {
-            Vertex v{};
+            const aiMesh* aMesh = scene->mMeshes[meshIndex];
+            const unsigned int vertexOffset = static_cast<unsigned int>(m_Mesh.vertices.size());
 
-            // Position
-            v.pos = {
-                aMesh->mVertices[i].x,
-                aMesh->mVertices[i].y,
-                aMesh->mVertices[i].z
-            };
-
-            // UVs
-            if (aMesh->HasTextureCoords(0)) {
-                v.uv = {
-                    aMesh->mTextureCoords[0][i].x,
-                    aMesh->mTextureCoords[0][i].y
-                };
-            }
-            else {
-                v.uv = { 0.0f, 0.0f };
-            }
-
-            // Normals
-            if (aMesh->HasNormals()) {
-                v.normal = {
-                    aMesh->mNormals[i].x, 
-                    aMesh->mNormals[i].y,
-                    aMesh->mNormals[i].z
-                };
-            }
-            else {
-                v.normal = { 0,0,0 };
-            }
-
-            m_Mesh.vertices.push_back(v);
-        }
-
-        // --- Load indices ---
-        for (unsigned int f = 0; f < aMesh->mNumFaces; f++)
-        {
-            const aiFace& face = aMesh->mFaces[f];
-            for (unsigned int i = 0; i < face.mNumIndices; i++)
+            // --- Load vertices ---
+            for (unsigned int i = 0; i < aMesh->mNumVertices; i++)
             {
-                m_Mesh.indices.push_back(face.mIndices[i]);
+                Vertex v{};
+
+                // Position
+                v.pos = {
+                    aMesh->mVertices[i].x,
+                    aMesh->mVertices[i].y,
+                    aMesh->mVertices[i].z
+                };
+
+                // UVs
+                if (aMesh->HasTextureCoords(0)) {
+                    v.uv = {
+                        aMesh->mTextureCoords[0][i].x,
+                        aMesh->mTextureCoords[0][i].y
+                    };
+                }
+                else {
+                    v.uv = { 0.0f, 0.0f };
+                }
+
+                // Normals
+                if (aMesh->HasNormals()) {
+                    v.normal = {
+                        aMesh->mNormals[i].x,
+                        aMesh->mNormals[i].y,
+                        aMesh->mNormals[i].z
+                    };
+                }
+                else {
+                    v.normal = { 0,0,0 };
+                }
+
+                m_Mesh.vertices.push_back(v);
+            }
+
+            // --- Load indices ---
+            for (unsigned int f = 0; f < aMesh->mNumFaces; f++)
+            {
+                const aiFace& face = aMesh->mFaces[f];
+                for (unsigned int i = 0; i < face.mNumIndices; i++)
+                {
+                    m_Mesh.indices.push_back(vertexOffset + face.mIndices[i]);
+                }
             }
         }
 
         return m_Mesh;
-	}
+    }
+
 
 }
