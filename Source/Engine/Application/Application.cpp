@@ -63,8 +63,8 @@ namespace Papyrus
             renderer.render();
             sceneManager.onDisable();
 
-            const auto sleepTime = currentTime + std::chrono::milliseconds(frameTimeMs) - std::chrono::high_resolution_clock::now();
-            std::this_thread::sleep_for(sleepTime);
+            //const auto sleepTime = currentTime + std::chrono::milliseconds(frameTimeMs) - std::chrono::high_resolution_clock::now();
+            //std::this_thread::sleep_for(sleepTime);
         }
 
 
@@ -75,10 +75,10 @@ namespace Papyrus
         camera->addComponent(std::make_unique<CameraComponent>()); 
 
         auto cottageModel = std::make_unique<GameObject>(); 
-        cottageModel->addComponent(std::make_unique<MeshComponent>("Resources/Models/cottage.fbx"));
+        cottageModel->addComponent(std::make_unique<MeshComponent>("Resources/Models/portal2_button.fbx"));
 
         auto shader = std::make_unique<OpenGLShader>("Shaders/vertShader.vert", "Shaders/fragShader.frag"); 
-        auto texture = std::make_unique<Texture>("Resources/Textures/container.jpg"); 
+        auto texture = std::make_unique<Texture>("Resources/Textures/portal_button_blue.jpeg"); 
         cottageModel->addComponent(std::make_unique<MaterialComponent>(std::move(shader), std::move(texture))); 
 
         auto* scene = SceneManager::getInstance().createScene("Default");

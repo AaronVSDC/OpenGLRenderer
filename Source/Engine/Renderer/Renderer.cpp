@@ -39,10 +39,9 @@ namespace Papyrus
             auto mesh = gameObject->getComponent<MeshComponent>();
             auto material = gameObject->getComponent<MaterialComponent>();
 
-            if (!mesh || !material) {
-                std::cout << "WARNING: Gameobject does not have a mesh!" << std::endl;
+            if (!mesh || !material) 
                 continue;
-            }
+            
 
 
             OpenGLShader* shader = material->getShader();
