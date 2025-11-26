@@ -77,7 +77,6 @@ namespace Papyrus
         const aiScene* scene = importer.ReadFile(
             path,
             aiProcess_Triangulate |
-            aiProcess_FlipUVs |
             aiProcess_GenNormals |
             aiProcess_JoinIdenticalVertices
         );
