@@ -92,7 +92,8 @@ namespace Papyrus
             aiProcess_FlipUVs
         );
 
-        if (!scene || !scene->HasMeshes()) {
+        if (!scene || !scene->HasMeshes()) 
+        {
             std::cerr << "Failed to load model: "
                 << importer.GetErrorString() << std::endl;
             return m_Mesh;
