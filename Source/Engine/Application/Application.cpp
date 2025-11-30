@@ -77,27 +77,25 @@ namespace Papyrus
         portalButton->addComponent(std::make_unique<MeshComponent>("Resources/Models/portal2_button.fbx"));
         portalButton->transform.scale = glm::vec3{ 0.1 }; 
 
-        auto portalButton2 = std::make_unique<GameObject>();
-        portalButton2->addComponent(std::make_unique<MeshComponent>("Resources/Models/portal2_button.fbx"));
-        portalButton2->transform.scale = glm::vec3{ 0.1 };
-        portalButton2->transform.position = glm::vec3{ -30.f,0.f,0.f }; 
-        portalButton2->addComponent(std::make_unique<MeshComponent>("Resources/Models/portal2_button.fbx"));
+        auto door = std::make_unique<GameObject>();
+        door->addComponent(std::make_unique<MeshComponent>("Resources/Models/Door.fbx"));
+        door->transform.scale = glm::vec3{ 0.1 };
+        door->transform.position = glm::vec3{ -30.f,0.f,0.f };   
+         
 
+        auto shader = std::make_shared<OpenGLShader>("Shaders/vertShader.vert", "Shaders/fragShader.frag"); 
+        auto portalButtonTexture = std::make_shared<Texture>("Resources/Textures/portal_button_blue.jpeg"); 
+        auto doorTexture = std::make_unique<Texture>("Resources/Textures/portal_door_02.jpeg"); 
+        portalButton->addComponent(std::make_unique<MaterialComponent>(shader, portalButtonTexture)); 
+        door->addComponent(std::make_unique<MaterialComponent>(shader, std::move(doorTexture))); 
 
-        auto shader = std::make_unique<OpenGLShader>("Shaders/vertShader.vert", "Shaders/fragShader.frag"); 
-        auto texture = std::make_unique<Texture>("Resources/Textures/portal_button_blue.jpeg"); 
-        auto shader2 = std::make_unique<OpenGLShader>("Shaders/vertShader.vert", "Shaders/fragShader.frag");
-        auto texture2 = std::make_unique<Texture>("Resources/Textures/portal_button_blue.jpeg");
-        portalButton->addComponent(std::make_unique<MaterialComponent>(std::move(shader), std::move(texture)));
-        portalButton2->addComponent(std::make_unique<MaterialComponent>(std::move(shader2), std::move(texture2))); 
-
-        auto* scene = SceneManager::getInstance().createScene("Default");
+        auto* scene = SceneManager::getInstance().createScene("DemoScene");
         if (scene != nullptr) 
         {
             scene->setIsActive(true);
             scene->add(std::move(camera));
             scene->add(std::move(portalButton));
-            scene->add(std::move(portalButton2));
+            scene->add(std::move(door));
 
         }
 

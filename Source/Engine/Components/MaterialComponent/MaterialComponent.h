@@ -13,7 +13,7 @@ namespace Papyrus
     {
     public: 
 
-        MaterialComponent(std::unique_ptr<OpenGLShader> shader, std::unique_ptr<Texture> texture = nullptr); 
+        MaterialComponent(std::shared_ptr<OpenGLShader> shader, std::shared_ptr<Texture> texture = nullptr); 
         ~MaterialComponent() = default;  
         MaterialComponent(const MaterialComponent&) = delete; 
         MaterialComponent(const MaterialComponent&&) = delete;
@@ -24,8 +24,8 @@ namespace Papyrus
         Texture* getTexture() const { return m_pTexture.get(); } 
 
     private: 
-        std::unique_ptr<OpenGLShader> m_pShader = nullptr;
-        std::unique_ptr<Texture> m_pTexture = nullptr;    
+        std::shared_ptr<OpenGLShader> m_pShader = nullptr;
+        std::shared_ptr<Texture> m_pTexture = nullptr;    
     };
 
 }
